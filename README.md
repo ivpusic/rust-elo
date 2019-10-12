@@ -1,5 +1,7 @@
 # rust-elo
 
+[![Build Status](https://travis-ci.org/ivpusic/rust-elo.svg?branch=master)](https://travis-ci.org/ivpusic/rust-elo)
+
 Rust crate for calculating players ratings based on elo ranking system.
 
 ## Installation
