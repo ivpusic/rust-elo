@@ -10,7 +10,7 @@ Add to your `Cargo.toml`
 
 ```bash
 [dependencies]
-elo = "0.2.0"
+elo = "0.2.1"
 ```
 
 ## Example usage

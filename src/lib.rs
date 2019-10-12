@@ -25,9 +25,6 @@ impl EloRank {
         let expected_a = self.calculate_expected(player_a, player_b);
         let expected_b = self.calculate_expected(player_b, player_a);
 
-        println!("{} {}", player_a, expected_a);
-        println!("{} {}", player_b, expected_b);
-
         let (score_a, score_b) = self.winner_to_score(winner);
         let new1 = player_a + k * (score_a - expected_a);
         let new2 = player_b + k * (score_b - expected_b);
