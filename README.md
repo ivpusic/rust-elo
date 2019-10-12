@@ -26,6 +26,6 @@ fn main() {
     let player_b = 1400.0;
     let winner = MatchWinner::PlayerA;
 
-    let (_player_a_new_ranking, _player_b_new_ranking) = elo.calculate(player_a, player_b, winner);
+    let (new_a_ranking, new_b_ranking) = elo.calculate(player_a, player_b, winner);
 }
 ```
