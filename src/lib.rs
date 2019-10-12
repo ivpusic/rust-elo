@@ -50,6 +50,14 @@ mod tests {
         let (player_a_new, player_b_new) = elo.calculate(1200.0, 1400.0, MatchWinner::PlayerB);
         assert_eq!(player_a_new, 1192.0);
         assert_eq!(player_b_new, 1408.0);
+
+        let (player_a_new, player_b_new) = elo.calculate(1400.0, 1200.0, MatchWinner::PlayerA);
+        assert_eq!(player_a_new, 1408.0);
+        assert_eq!(player_b_new, 1192.0);
+
+        let (player_a_new, player_b_new) = elo.calculate(1400.0, 1200.0, MatchWinner::PlayerB);
+        assert_eq!(player_a_new, 1376.0);
+        assert_eq!(player_b_new, 1224.0);
     }
 
     #[test]
