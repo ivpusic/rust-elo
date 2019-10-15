@@ -1,8 +1,3 @@
-pub enum MatchWinner {
-    PlayerB = 0,
-    PlayerA = 1,
-}
-
 pub struct EloRank {
     pub k: i32,
 }
@@ -12,56 +7,41 @@ impl EloRank {
         1.0 / (1.0 + (10f64.powf((score_b - score_a) / 400.0)))
     }
 
-    fn winner_to_score(&self, winner: MatchWinner) -> (f64, f64) {
-        match winner {
-            MatchWinner::PlayerA => (1.0, 0.0),
-            MatchWinner::PlayerB => (0.0, 1.0),
-        }
-    }
-
-    pub fn calculate(&self, player_a: f64, player_b: f64, winner: MatchWinner) -> (f64, f64) {
+    pub fn calculate(&self, winner: f64, looser: f64) -> (f64, f64) {
         let k = self.k as f64;
 
-        let expected_a = self.calculate_expected(player_a, player_b);
-        let expected_b = self.calculate_expected(player_b, player_a);
+        let expected_a = self.calculate_expected(winner, looser);
+        let expected_b = self.calculate_expected(looser, winner);
 
-        let (score_a, score_b) = self.winner_to_score(winner);
-        let new1 = player_a + k * (score_a - expected_a);
-        let new2 = player_b + k * (score_b - expected_b);
+        let (score_w, score_l) = (1.0, 0.0);
+        let winner_new_score = winner + k * (score_w - expected_a);
+        let looser_new_score = looser + k * (score_l - expected_b);
 
-        (new1.round(), new2.round())
+        (winner_new_score, looser_new_score)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{EloRank, MatchWinner};
+    use crate::EloRank;
 
     #[test]
     fn calculates_correct_ratings() {
         let elo = EloRank { k: 32 };
-        let (player_a_new, player_b_new) = elo.calculate(1200.0, 1400.0, MatchWinner::PlayerA);
-        assert_eq!(player_a_new, 1224.0);
-        assert_eq!(player_b_new, 1376.0);
+        let (winner_new, looser_new) = elo.calculate(1200.0, 1400.0);
+        assert_eq!(winner_new, 1224.3119016527346);
+        assert_eq!(looser_new, 1375.6880983472654);
 
-        let (player_a_new, player_b_new) = elo.calculate(1200.0, 1400.0, MatchWinner::PlayerB);
-        assert_eq!(player_a_new, 1192.0);
-        assert_eq!(player_b_new, 1408.0);
-
-        let (player_a_new, player_b_new) = elo.calculate(1400.0, 1200.0, MatchWinner::PlayerA);
-        assert_eq!(player_a_new, 1408.0);
-        assert_eq!(player_b_new, 1192.0);
-
-        let (player_a_new, player_b_new) = elo.calculate(1400.0, 1200.0, MatchWinner::PlayerB);
-        assert_eq!(player_a_new, 1376.0);
-        assert_eq!(player_b_new, 1224.0);
+        let (winner_new, looser_new) = elo.calculate(1400.0, 1200.0);
+        assert_eq!(winner_new, 1407.6880983472654);
+        assert_eq!(looser_new, 1192.3119016527346);
     }
 
     #[test]
     fn rounds_ratings_properly() {
         let elo = EloRank { k: 32 };
-        let (player_a_new, player_b_new) = elo.calculate(1802.0, 1186.0, MatchWinner::PlayerA);
-        assert_eq!(player_a_new, 1803.0);
-        assert_eq!(player_b_new, 1185.0);
+        let (winner_new, looser_new) = elo.calculate(1802.0, 1186.0);
+        assert_eq!(winner_new, 1802.8970197488543);
+        assert_eq!(looser_new, 1185.1029802511457);
     }
 }

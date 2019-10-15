@@ -18,14 +18,13 @@ elo = "0.2.1"
 ```rust
 extern crate elo;
 
-use elo::{EloRank, MatchWinner};
+use elo::EloRank;
 
 fn main() {
     let elo = EloRank { k: 32 };
-    let player_a = 1200.0;
-    let player_b = 1400.0;
-    let winner = MatchWinner::PlayerA;
+    let winner = 1200.0;
+    let looser = 1400.0;
 
-    let (new_a_ranking, new_b_ranking) = elo.calculate(player_a, player_b, winner);
+    let (winner_new_score, looser_new_score) = elo.calculate(winner, looser);
 }
 ```
